@@ -38,12 +38,12 @@ def init_db():
         )
     ''')
     
-    # Seed Doctors
-    first_names = ['Sarah', 'John', 'Michael', 'Emily', 'David', 'Jessica', 'James', 'Laura', 'Robert', 'Jennifer']
-    last_names = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez']
-    specialties = ['Medical Oncologist', 'Radiation Oncologist', 'Surgical Oncologist', 'Hematologist', 'Pediatric Oncologist']
-    hospitals = ['City General Hospital', 'Mercy Medical Center', 'Hope Cancer Institute', 'University Healthcare', 'Valley Wellness Center']
-    locations = ['New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX', 'Phoenix, AZ']
+    # Seed Doctors (Greek names and locations)
+    first_names = ['Γιώργος', 'Κώστας', 'Νίκος', 'Δημήτρης', 'Γιάννης', 'Μαρία', 'Ελένη', 'Κατερίνα', 'Αναστασία', 'Σοφία']
+    last_names = ['Παπαδόπουλος', 'Οικονόμου', 'Μακρής', 'Γεωργίου', 'Αντωνίου', 'Καραμανλής', 'Στεργίου', 'Μπαλτάς', 'Σαμαράς', 'Νικολάου']
+    specialties = ['Παθολόγος Ογκολόγος', 'Ακτινοθεραπευτής Ογκολόγος', 'Χειρουργός Ογκολόγος', 'Αιματολόγος', 'Παιδοογκολόγος']
+    hospitals = ['Νοσοκομείο Άγιος Σάββας', 'Αντικαρκινικό Θεαγένειο', 'Ογκολογικό Μεταξά', 'Ιατρικό Κέντρο Αθηνών', 'Ευαγγελισμός']
+    locations = ['Αθήνα', 'Θεσσαλονίκη', 'Πάτρα', 'Ηράκλειο', 'Λάρισα']
     
     doctors_data = []
     for _ in range(30):
@@ -52,7 +52,7 @@ def init_db():
         hospital = random.choice(hospitals)
         location = random.choice(locations)
         rating = round(random.uniform(3.5, 5.0), 1)
-        bio = f"{name} is a dedicated {specialty} at {hospital} with over {random.randint(5, 25)} years of experience in treating complex cancer cases with compassion and cutting-edge treatments."
+        bio = f"Ο/Η {name} είναι εξειδικευμένος/η {specialty} στο {hospital} με πάνω από {random.randint(5, 25)} χρόνια εμπειρίας στην αντιμετώπιση περίπλοκων ογκολογικών περιστατικών με σύγχρονες θεραπείες."
         image_url = f"https://api.dicebear.com/7.x/notionists/svg?seed={name.replace(' ', '')}"
         
         doctors_data.append((name, specialty, hospital, location, bio, rating, image_url))

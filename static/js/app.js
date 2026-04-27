@@ -25,7 +25,8 @@ const translations = {
     submitPost: "Post",
     loadingPosts: "Loading posts...",
     noPosts: "No posts yet. Be the first to share your story!",
-    likes: "Likes"
+    likes: "Likes",
+    toggleContrast: "Toggle High Contrast"
   },
   el: {
     appTitle: "OncoBridge",
@@ -50,7 +51,8 @@ const translations = {
     submitPost: "Δημοσίευση",
     loadingPosts: "Φόρτωση ιστοριών...",
     noPosts: "Δεν υπάρχουν δημοσιεύσεις ακόμα. Γίνετε ο πρώτος που θα μοιραστεί την ιστορία του!",
-    likes: "Μου αρέσει"
+    likes: "Μου αρέσει",
+    toggleContrast: "Υψηλή Αντίθεση"
   }
 };
 
@@ -311,6 +313,15 @@ function SocialFeed({ t, lang }) {
 function App() {
   const [lang, setLang] = useState('en');
   const [activeTab, setActiveTab] = useState('doctors'); // 'doctors' or 'social'
+  const [highContrast, setHighContrast] = useState(false);
+
+  useEffect(() => {
+    if (highContrast) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+  }, [highContrast]);
 
   const t = (key) => translations[lang][key] || key;
 
@@ -332,6 +343,14 @@ function App() {
               <option value="en">English</option>
               <option value="el">Ελληνικά</option>
             </select>
+            <button 
+              className="btn-icon a11y-btn" 
+              onClick={() => setHighContrast(!highContrast)}
+              aria-label={t('toggleContrast')}
+              title={t('toggleContrast')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z"></path></svg>
+            </button>
             <button className="btn btn-primary">{t('signIn')}</button>
           </nav>
         </div>

@@ -322,6 +322,66 @@ p {
   color: var(--text-muted);
 }
 
+/* High Contrast Mode */
+body.high-contrast {
+  --primary: #000000;
+  --primary-light: #FFFFFF;
+  --secondary: #000000;
+  --secondary-light: #FFFFFF;
+  --bg-gradient-start: #FFFFFF;
+  --bg-gradient-end: #FFFFFF;
+  --surface: #FFFFFF;
+  --text-main: #000000;
+  --text-muted: #000000;
+  --border-color: #000000;
+  --focus-ring: #FF0000;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+}
+
+body.high-contrast * {
+  border-color: #000000 !important;
+}
+
+body.high-contrast .doctor-card,
+body.high-contrast .post-card,
+body.high-contrast .filters-container,
+body.high-contrast .post-composer {
+  border: 2px solid #000000 !important;
+}
+
+body.high-contrast .btn-primary {
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 2px solid #000000;
+}
+
+body.high-contrast .btn-secondary {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+.a11y-btn {
+  padding: 0.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: var(--surface);
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.a11y-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
 /* Animations */
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out;
