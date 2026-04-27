@@ -26,7 +26,13 @@ const translations = {
     loadingPosts: "Loading posts...",
     noPosts: "No posts yet. Be the first to share your story!",
     likes: "Likes",
-    toggleContrast: "Toggle High Contrast"
+    toggleContrast: "Toggle High Contrast",
+    a11yMenu: "Accessibility Menu",
+    highContrast: "High Contrast",
+    adhdMode: "ADHD Friendly",
+    colorblindMode: "Colorblind Safe",
+    largeText: "Large Text",
+    toggleTheme: "Toggle Dark Mode"
   },
   el: {
     appTitle: "OncoBridge",
@@ -52,7 +58,13 @@ const translations = {
     loadingPosts: "Φόρτωση ιστοριών...",
     noPosts: "Δεν υπάρχουν δημοσιεύσεις ακόμα. Γίνετε ο πρώτος που θα μοιραστεί την ιστορία του!",
     likes: "Μου αρέσει",
-    toggleContrast: "Υψηλή Αντίθεση"
+    toggleContrast: "Υψηλή Αντίθεση",
+    a11yMenu: "Μενού Προσβασιμότητας",
+    highContrast: "Υψηλή Αντίθεση",
+    adhdMode: "Φιλικό για ΔΕΠΥ",
+    colorblindMode: "Ασφαλές για Αχρωματοψία",
+    largeText: "Μεγάλο Κείμενο",
+    toggleTheme: "Εναλλαγή Σκοτεινού Θέματος"
   }
 };
 
@@ -310,18 +322,68 @@ function SocialFeed({ t, lang }) {
   );
 }
 
+function A11yMenu({ t }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [settings, setSettings] = useState({
+    highContrast: false,
+    adhdMode: false,
+    colorblindMode: false,
+    largeText: false
+  });
+
+  useEffect(() => {
+    const rootEl = document.documentElement;
+    settings.highContrast ? rootEl.classList.add('a11y-high-contrast') : rootEl.classList.remove('a11y-high-contrast');
+    settings.adhdMode ? rootEl.classList.add('a11y-adhd') : rootEl.classList.remove('a11y-adhd');
+    settings.colorblindMode ? rootEl.classList.add('a11y-colorblind') : rootEl.classList.remove('a11y-colorblind');
+    settings.largeText ? rootEl.classList.add('a11y-large-text') : rootEl.classList.remove('a11y-large-text');
+  }, [settings]);
+
+  const toggleSetting = (key) => {
+    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return (
+    <div className="accessibility-panel">
+      {isOpen && (
+        <div className="a11y-menu">
+          <h4>{t('a11yMenu')}</h4>
+          <div className="a11y-options">
+            <button className={`a11y-option ${settings.highContrast ? 'active' : ''}`} onClick={() => toggleSetting('highContrast')}>
+              <span className="icon">🌗</span> {t('highContrast')}
+            </button>
+            <button className={`a11y-option ${settings.adhdMode ? 'active' : ''}`} onClick={() => toggleSetting('adhdMode')}>
+              <span className="icon">🎯</span> {t('adhdMode')}
+            </button>
+            <button className={`a11y-option ${settings.colorblindMode ? 'active' : ''}`} onClick={() => toggleSetting('colorblindMode')}>
+              <span className="icon">👁️</span> {t('colorblindMode')}
+            </button>
+            <button className={`a11y-option ${settings.largeText ? 'active' : ''}`} onClick={() => toggleSetting('largeText')}>
+              <span className="icon">T+</span> {t('largeText')}
+            </button>
+          </div>
+        </div>
+      )}
+      <button 
+        className="a11y-trigger" 
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={t('a11yMenu')}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="M15 22v-5l-3-3v-4"></path><path d="M9 22v-5l3-3v-4"></path><path d="M12 10V6"></path><path d="M21 9a14.7 14.7 0 0 0-18 0"></path></svg>
+      </button>
+    </div>
+  );
+}
+
 function App() {
   const [lang, setLang] = useState('en');
   const [activeTab, setActiveTab] = useState('doctors'); // 'doctors' or 'social'
-  const [highContrast, setHighContrast] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    if (highContrast) {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-  }, [highContrast]);
+    const rootEl = document.documentElement;
+    darkMode ? rootEl.classList.add('dark-mode') : rootEl.classList.remove('dark-mode');
+  }, [darkMode]);
 
   const t = (key) => translations[lang][key] || key;
 
@@ -330,7 +392,7 @@ function App() {
       <header>
         <div className="app-container nav-content">
           <a href="#" className="logo" aria-label={t('appTitle')} onClick={(e) => { e.preventDefault(); setActiveTab('doctors'); }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08v0c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"/><path d="m18 15-2-2"/><path d="m15 18-2-2"/></svg>
             {t('appTitle')}
           </a>
           <nav className="header-actions" aria-label="Main Navigation">
@@ -344,12 +406,16 @@ function App() {
               <option value="el">Ελληνικά</option>
             </select>
             <button 
-              className="btn-icon a11y-btn" 
-              onClick={() => setHighContrast(!highContrast)}
-              aria-label={t('toggleContrast')}
-              title={t('toggleContrast')}
+              className="btn-icon" 
+              onClick={() => setDarkMode(!darkMode)}
+              aria-label={t('toggleTheme')}
+              title={t('toggleTheme')}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z"></path></svg>
+              {darkMode ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              )}
             </button>
             <button className="btn btn-primary">{t('signIn')}</button>
           </nav>
@@ -386,6 +452,7 @@ function App() {
           </>
         )}
       </main>
+      <A11yMenu t={t} />
     </>
   );
 }

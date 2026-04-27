@@ -13,6 +13,9 @@
   --text-muted: #4B5563; /* Accessible gray */
   --border-color: #E5E7EB;
   --focus-ring: #0A6B70;
+  --surface-alt: #FCFDFD;
+  --input-bg: #F9FAFB;
+  --input-focus-bg: #FFFFFF;
   
   /* Typography */
   --font-family: 'Inter', sans-serif;
@@ -24,6 +27,26 @@
   
   /* Transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode Variables */
+html.dark-mode {
+  --primary: #2DD4BF; /* Lighter teal for contrast on dark */
+  --primary-light: rgba(45, 212, 191, 0.15);
+  --secondary: #F87171; /* Lighter terra cotta */
+  --secondary-light: rgba(248, 113, 113, 0.15);
+  --bg-gradient-start: #0F172A; /* Slate 900 */
+  --bg-gradient-end: #1E293B; /* Slate 800 */
+  --surface: #1E293B; /* Slate 800 */
+  --text-main: #F8FAFC; /* Slate 50 */
+  --text-muted: #94A3B8; /* Slate 400 */
+  --border-color: #334155; /* Slate 700 */
+  --surface-alt: #0F172A; /* Slate 900 for contrast */
+  --input-bg: #0F172A;
+  --input-focus-bg: #1E293B;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5), 0 2px 4px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -2px rgba(0,0,0,0.3);
 }
 
 /* Reduced Motion Preference */
@@ -179,11 +202,12 @@ p {
   font-size: 1rem;
   font-family: inherit;
   transition: var(--transition);
-  background-color: #F9FAFB;
+  background-color: var(--input-bg);
+  color: var(--text-main);
 }
 
 .form-control:focus {
-  background-color: #FFFFFF;
+  background-color: var(--input-focus-bg);
   border-color: var(--primary);
   outline: none;
   box-shadow: 0 0 0 3px rgba(10, 107, 112, 0.2);
@@ -221,7 +245,7 @@ p {
   align-items: center;
   gap: 1rem;
   border-bottom: 1px solid var(--border-color);
-  background-color: #FCFDFD;
+  background-color: var(--surface-alt);
 }
 
 .doctor-avatar {
@@ -569,4 +593,373 @@ body.high-contrast .btn-secondary {
 .btn-icon:hover {
   color: var(--secondary);
   background-color: var(--secondary-light);
+}
+
+/* Accessibility Widget */
+.accessibility-panel {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.a11y-trigger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.a11y-trigger:hover {
+  transform: scale(1.05);
+}
+
+.a11y-menu {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  width: 300px;
+  border: 1px solid var(--border-color);
+}
+
+.a11y-menu h4 {
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.a11y-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.a11y-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.a11y-option:hover {
+  background: var(--primary-light);
+}
+
+.a11y-option.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  font-weight: 600;
+}
+
+/* Accessibility Modes */
+html.a11y-high-contrast {
+  --primary: #000000;
+  --primary-light: #FFFFFF;
+  --secondary: #000000;
+  --secondary-light: #FFFFFF;
+  --bg-gradient-start: #FFFFFF;
+  --bg-gradient-end: #FFFFFF;
+  --surface: #FFFFFF;
+  --text-main: #000000;
+  --text-muted: #000000;
+  --border-color: #000000;
+  --focus-ring: #FF0000;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+}
+
+html.a11y-high-contrast * {
+  border-color: #000000 !important;
+}
+
+html.a11y-high-contrast .doctor-card,
+html.a11y-high-contrast .post-card,
+html.a11y-high-contrast .filters-container,
+html.a11y-high-contrast .post-composer,
+html.a11y-high-contrast .a11y-menu {
+  border: 2px solid #000000 !important;
+}
+
+html.a11y-high-contrast .btn-primary,
+html.a11y-high-contrast .a11y-trigger {
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 2px solid #000000;
+}
+
+html.a11y-high-contrast .btn-secondary {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+html.a11y-adhd {
+  line-height: 2 !important;
+  letter-spacing: 0.5px !important;
+}
+
+html.a11y-adhd a, 
+html.a11y-adhd button, 
+html.a11y-adhd .doctor-card,
+html.a11y-adhd .post-card {
+  outline: 4px solid #FFD700 !important;
+  outline-offset: 2px !important;
+}
+
+html.a11y-colorblind #root > *:not(.accessibility-panel) {
+  filter: contrast(120%) saturate(150%) !important;
+}
+
+html.a11y-large-text {
+  font-size: 130% !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header & Lang Switcher */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.lang-switcher {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--surface);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.lang-switcher:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10, 107, 112, 0.2);
+}
+
+/* Tabs Container */
+.tabs-container {
+  display: flex;
+  gap: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: var(--transition);
+}
+
+.tab-btn:hover {
+  color: var(--primary);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+/* Social Feed Styles */
+.social-feed {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.post-composer {
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
+}
+
+.post-composer h3 {
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.post-composer form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.post-composer textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-actions .form-control {
+  max-width: 250px;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.post-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.post-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.post-meta h4 {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin-bottom: 0.1rem;
+}
+
+.post-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.post-content {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.post-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.btn-icon:hover {
+  color: var(--secondary);
+  background-color: var(--secondary-light);
+}
+
+/* Dark High Contrast Combinations */
+html.dark-mode.a11y-high-contrast {
+  --primary: #FFFFFF;
+  --primary-light: #000000;
+  --secondary: #FFFFFF;
+  --secondary-light: #000000;
+  --bg-gradient-start: #000000;
+  --bg-gradient-end: #000000;
+  --surface: #000000;
+  --surface-alt: #000000;
+  --input-bg: #000000;
+  --input-focus-bg: #000000;
+  --text-main: #FFFFFF;
+  --text-muted: #FFFFFF;
+  --border-color: #FFFFFF;
+  --focus-ring: #FFFF00;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+}
+
+html.dark-mode.a11y-high-contrast * {
+  border-color: #FFFFFF !important;
+}
+
+html.dark-mode.a11y-high-contrast .doctor-card,
+html.dark-mode.a11y-high-contrast .post-card,
+html.dark-mode.a11y-high-contrast .filters-container,
+html.dark-mode.a11y-high-contrast .post-composer,
+html.dark-mode.a11y-high-contrast .accessibility-panel .a11y-menu {
+  border: 2px solid #FFFFFF !important;
+}
+
+html.dark-mode.a11y-high-contrast .btn-primary,
+html.dark-mode.a11y-high-contrast .a11y-trigger {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 2px solid #FFFFFF;
+}
+
+html.dark-mode.a11y-high-contrast .btn-secondary {
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
 }
