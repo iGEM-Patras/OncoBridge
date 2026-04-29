@@ -68,20 +68,39 @@ const translations = {
   }
 };
 
+// --- Transliteration ---
+const greekToLatinMap = {
+  'Α': 'A', 'Β': 'V', 'Γ': 'G', 'Δ': 'D', 'Ε': 'E', 'Ζ': 'Z', 'Η': 'I', 'Θ': 'Th', 'Ι': 'I', 'Κ': 'K', 'Λ': 'L', 'Μ': 'M', 'Ν': 'N', 'Ξ': 'X', 'Ο': 'O', 'Π': 'P', 'Ρ': 'R', 'Σ': 'S', 'Τ': 'T', 'Υ': 'Y', 'Φ': 'F', 'Χ': 'Ch', 'Ψ': 'Ps', 'Ω': 'O',
+  'α': 'a', 'β': 'v', 'γ': 'g', 'δ': 'd', 'ε': 'e', 'ζ': 'z', 'η': 'i', 'θ': 'th', 'ι': 'i', 'κ': 'k', 'λ': 'l', 'μ': 'm', 'ν': 'n', 'ξ': 'x', 'ο': 'o', 'π': 'p', 'ρ': 'r', 'σ': 's', 'ς': 's', 'τ': 't', 'υ': 'y', 'φ': 'f', 'χ': 'ch', 'ψ': 'ps', 'ω': 'o',
+  'ά': 'a', 'έ': 'e', 'ή': 'i', 'ί': 'i', 'ό': 'o', 'ύ': 'y', 'ώ': 'o',
+  'Ά': 'A', 'Έ': 'E', 'Ή': 'I', 'Ί': 'I', 'Ό': 'O', 'Ύ': 'Y', 'Ώ': 'O'
+};
+
+function transliterateGreek(text) {
+  if (!text) return text;
+  return text.split('').map(char => greekToLatinMap[char] || char).join('');
+}
+
 // --- Components ---
 
-function DoctorCard({ doctor, t }) {
+function DoctorCard({ doctor, t, lang }) {
+  let displayName = lang === 'el' ? doctor.name.replace(/Dr\./g, 'Δρ.') : doctor.name;
+  if (lang === 'en') {
+    displayName = transliterateGreek(displayName);
+  }
+  const displayBio = lang === 'el' ? doctor.bio.replace(/Dr\./g, 'Δρ.') : doctor.bio;
+
   return (
     <article className="doctor-card">
       <div className="doctor-header">
         <img 
           src={doctor.image_url} 
-          alt={`Profile picture of ${doctor.name}`} 
+          alt={`Profile picture of ${displayName}`} 
           className="doctor-avatar"
           loading="lazy"
         />
         <div className="doctor-info">
-          <h3>{doctor.name}</h3>
+          <h3>{displayName}</h3>
           <span className="doctor-specialty">{doctor.specialty}</span>
         </div>
       </div>
@@ -100,10 +119,10 @@ function DoctorCard({ doctor, t }) {
             <span>{doctor.rating} / 5.0</span>
           </div>
         </div>
-        <p className="doctor-bio">{doctor.bio}</p>
+        <p className="doctor-bio">{displayBio}</p>
       </div>
       <div className="doctor-footer">
-        <button className="btn btn-secondary" aria-label={`View full profile of ${doctor.name}`}>
+        <button className="btn btn-secondary" aria-label={`View full profile of ${displayName}`}>
           {t('viewProfile')}
         </button>
       </div>
@@ -184,7 +203,7 @@ function DoctorDiscovery({ t, lang }) {
           <div className="doctors-grid" role="list">
             {doctors.map(doctor => (
               <div key={doctor.id} role="listitem">
-                <DoctorCard doctor={doctor} t={t} />
+                <DoctorCard doctor={doctor} t={t} lang={lang} />
               </div>
             ))}
           </div>
@@ -289,14 +308,16 @@ function SocialFeed({ t, lang }) {
           </div>
         ) : posts.length > 0 ? (
           <div className="posts-list">
-            {posts.map(post => (
+            {posts.map(post => {
+              const displayAuthor = lang === 'en' ? transliterateGreek(post.author_name) : post.author_name;
+              return (
               <article key={post.id} className="post-card">
                 <div className="post-header">
                   <div className="post-avatar">
-                    {post.author_name.charAt(0).toUpperCase()}
+                    {displayAuthor.charAt(0).toUpperCase()}
                   </div>
                   <div className="post-meta">
-                    <h4>{post.author_name}</h4>
+                    <h4>{displayAuthor}</h4>
                     <span className="post-date">{new Date(post.timestamp).toLocaleDateString(lang === 'el' ? 'el-GR' : 'en-US')}</span>
                   </div>
                 </div>
@@ -310,7 +331,7 @@ function SocialFeed({ t, lang }) {
                   </button>
                 </div>
               </article>
-            ))}
+            )})}
           </div>
         ) : (
           <div className="empty-state" aria-live="polite">
